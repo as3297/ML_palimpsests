@@ -45,9 +45,6 @@ class ReadImageCube():
             """
 
         with Image.open(path) as im:
-            if self.rotate_angle>0:
-                rotation = eval("Image.ROTATE_{}".format(self.rotate_angle))
-                im = im.transpose(rotation)
             if crop:
                 "coords - left, upper, right, lower"
                 im = im.crop(coord)
@@ -55,6 +52,10 @@ class ReadImageCube():
                 width, height = im.size
                 new_size = (width//scale_ratio,height//scale_ratio)
                 im = im.resize(new_size)
+            if self.rotate_angle>0:
+                rotation = eval("Image.ROTATE_{}".format(self.rotate_angle))
+                im = im.transpose(rotation)
+
             im = np.array(im)
             if self.stretch_contrast:
                 im = self.strech_contrast_fun(im,max_val)
